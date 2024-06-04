@@ -20,6 +20,22 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet 
     private weak var yesButton: UIButton!
     
+    // MARK: - Lifecycle
+
+    private var currentQuestionIndex = 0
+    
+    private var correctAnswers = 0
+    
+    private let questionsAmount: Int = 10
+    
+    private var questionFactory: QuestionFactoryProtocol?
+    
+    private var currentQuestion: QuizQuestion?
+    
+    private var alertPresenter: AlertPresenter?
+    
+    private var statisticService: StatisticServiceProtocol!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,6 +44,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         self.questionFactory = questionFactory
         
         self.alertPresenter = AlertPresenter(viewController: self)
+        
+        //выводим статистику
+        statisticService = StatisticService()
         
         //разгружаем метод viewDidLoad
         easyViewDid()
@@ -49,20 +68,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self?.show(quiz: viewModel)
         }
     }
-    
-    // MARK: - Lifecycle
-
-    private var currentQuestionIndex = 0
-    
-    private var correctAnswers = 0
-    
-    private let questionsAmount: Int = 10
-    
-    private var questionFactory: QuestionFactoryProtocol?
-    
-    private var currentQuestion: QuizQuestion?
-    
-    private var alertPresenter: AlertPresenter?
     
     // MARK: - Actions
     
@@ -150,21 +155,46 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1 {
+            // Сохраняем результаты игры
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
+            
             let text = correctAnswers == questionsAmount ?
             "Поздравляем, вы ответили на 10 из 10!" :
-            "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
+            "Ваш результат: \(correctAnswers)/10"
             
-            let viewModel = QuizResultsViewModel( // 2
+            //Получаем данные об общем кол-ве сыгранных игр
+            let totalGames = statisticService.gamesCount
+            let totalGamesMessage = "Количество сыгранных квизов: \(totalGames)"
+            
+            // Получаем данные о лучшей игре
+            let bestGame = statisticService.bestGame
+            
+            // Форматируем дату
+            let formattedDate = bestGame.date.dateTimeString
+            
+            let bestGameMessage = "Рекорд: \(bestGame.correct)/\(bestGame.total) (\(formattedDate))"
+            
+            // Получаем среднюю точность
+            let totalAccuracy = statisticService.totalAccuracy
+            let accuracyMessage = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
+            
+            // Формируем полное сообщение
+            let fullMessage = "\(text)\n\(totalGamesMessage)\n\(bestGameMessage)\n\(accuracyMessage)"
+            
+            let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            show(quiz: viewModel) // 3
+                text: fullMessage,
+                buttonText: "Сыграть ещё раз"
+            )
+            show(quiz: viewModel)
         } else {
             currentQuestionIndex += 1
             previewImage.layer.borderWidth = 0
             questionFactory?.requestNextQuestion()
         }
     }
+
+
     
     private func easyViewDid () {
         questionTitleLable.font =  UIFont(name: "YSDisplay-Medium", size: 20)
