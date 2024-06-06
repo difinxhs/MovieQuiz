@@ -34,7 +34,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private var alertPresenter: AlertPresenter?
     
-    private var statisticService: StatisticServiceProtocol!
+    private var statisticService: StatisticServiceProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -155,6 +155,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1 {
+            guard let statisticService = statisticService else {
+                return
+            }
+            
+            //убираем цветную рамку после каждого вопроса и при запуске новой игры
+            previewImage.layer.borderWidth = 0
+            
             // Сохраняем результаты игры
             statisticService.store(correct: correctAnswers, total: questionsAmount)
             
@@ -179,7 +186,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             let accuracyMessage = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
             
             // Формируем полное сообщение
-            let fullMessage = "\(text)\n\(totalGamesMessage)\n\(bestGameMessage)\n\(accuracyMessage)"
+            let fullMessage = """
+            \(text)
+            \(totalGamesMessage)
+            \(bestGameMessage)
+            \(accuracyMessage)
+            """
             
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",

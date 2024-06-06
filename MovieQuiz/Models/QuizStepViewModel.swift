@@ -1,4 +1,3 @@
-import Foundation
 import UIKit
 
 //Для состояния "Вопрос показан"
