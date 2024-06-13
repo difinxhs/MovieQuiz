@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -102,17 +102,23 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="C9h-VR-8bN">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="kqI-4Q-f6j" secondAttribute="bottom" id="C4c-YO-rn8"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="kqI-4Q-f6j" secondAttribute="trailing" constant="20" id="I2R-II-fgp"/>
+                            <constraint firstItem="C9h-VR-8bN" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Qfv-zT-5ps"/>
                             <constraint firstItem="kqI-4Q-f6j" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="QgQ-ny-4bu"/>
+                            <constraint firstItem="C9h-VR-8bN" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="pIj-B7-ecr"/>
                             <constraint firstItem="kqI-4Q-f6j" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="x72-kh-BRr"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="C9h-VR-8bN" id="flo-j7-ffm"/>
                         <outlet property="indexLable" destination="RNz-2q-KZi" id="TBE-Dt-YOq"/>
                         <outlet property="noButton" destination="CnY-t9-5oK" id="rhc-rm-UuS"/>
                         <outlet property="previewImage" destination="dGJ-vo-enO" id="WDi-gD-Tsb"/>
