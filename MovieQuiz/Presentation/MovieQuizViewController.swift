@@ -50,10 +50,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         showLoadingIndicator()
         questionFactory?.loadData()
         
-//        let questionFactory = QuestionFactory()
-//        questionFactory.delegate = self
-//        self.questionFactory = questionFactory
-        
         self.alertPresenter = AlertPresenter(viewController: self)
         
         //выводим статистику
@@ -62,7 +58,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         //разгружаем метод viewDidLoad
         easyViewDid()
         
-        //questionFactory.requestNextQuestion()
+        activityIndicator.hidesWhenStopped = true
+
     }
     //MARK: - QuestionFactoryDelegate
     
@@ -77,11 +74,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
+            self?.hideLoadingIndicator()
         }
     }
     
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true
+        hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
     
@@ -222,6 +220,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             currentQuestionIndex += 1
             previewImage.layer.borderWidth = 0
             questionFactory?.requestNextQuestion()
+            showLoadingIndicator()
         }
     }
 
@@ -234,12 +233,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func showLoadingIndicator() {
-        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
+        //activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
         activityIndicator.startAnimating() // включаем анимацию
     }
     
+    private func hideLoadingIndicator() {
+        //activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+    }
+    
     private func showNetworkError(message: String) {
-        //hideLoadingIndicator() // скрываем индикатор загрузки
+        hideLoadingIndicator() // скрываем индикатор загрузки
         
         let alertModel = AlertModel(
             title: "Ошибка",
