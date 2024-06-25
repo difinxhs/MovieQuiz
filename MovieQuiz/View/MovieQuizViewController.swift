@@ -30,8 +30,6 @@ final class MovieQuizViewController: UIViewController {
     
     private var alertPresenter: AlertPresenter?
     
-    private var statisticService: StatisticServiceProtocol?
-    
     private var presenter: MovieQuizPresenter!
 
        override func viewDidLoad() {
@@ -70,19 +68,23 @@ final class MovieQuizViewController: UIViewController {
            indexLable.text = step.questionNumber
        }
        
-       func show(quiz result: QuizResultsViewModel) {
-           let alertModel = AlertModel(
+    func show(quiz result: QuizResultsViewModel) {
+           let message = presenter.makeResultsMessage()
+           
+           let alert = UIAlertController(
                title: result.title,
-               message: result.text,
-               buttonText: result.buttonText,
-               completion: { [weak self] in
+               message: message,
+               preferredStyle: .alert)
+               
+           let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
                    guard let self = self else { return }
                    
                    self.presenter.restartGame()
-               }
-           )
+           }
            
-           alertPresenter?.present(alert: alertModel)
+           alert.addAction(action)
+           
+           self.present(alert, animated: true, completion: nil)
        }
        
        func showAnswerResult(isCorrect: Bool) {
