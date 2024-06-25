@@ -43,7 +43,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         previewImage.layer.cornerRadius = 20
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
-        statisticService = StatisticService()
+       statisticService = StatisticService()
 
         showLoadingIndicator()
         questionFactory?.loadData()
@@ -133,67 +133,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
        
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            
-            self.showNextQuestionOrResults()
+                    guard let self = self else { return }
+                    self.presenter.correctAnswers = self.correctAnswers
+                    self.presenter.questionFactory = self.questionFactory
+                    self.presenter.showNextQuestionOrResults()
             
             // Разблокируем кнопки
             self.yesButton.isEnabled = true
             self.noButton.isEnabled = true
-        }
-    }
-    
-    private func showNextQuestionOrResults() {
-        if presenter.isLastQuestion() {
-            guard let statisticService = statisticService else {
-                return
-            }
             
-            //убираем цветную рамку после каждого вопроса и при запуске новой игры
             previewImage.layer.borderWidth = 0
-            
-            // Сохраняем результаты игры
-            statisticService.store(correct: correctAnswers, total: presenter.questionsAmount)
-            
-            let text = correctAnswers == presenter.questionsAmount ?
-            "Поздравляем, вы ответили на 10 из 10!" :
-            "Ваш результат: \(correctAnswers)/10"
-            
-            //Получаем данные об общем кол-ве сыгранных игр
-            let totalGames = statisticService.gamesCount
-            let totalGamesMessage = "Количество сыгранных квизов: \(totalGames)"
-            
-            // Получаем данные о лучшей игре
-            let bestGame = statisticService.bestGame
-            
-            // Форматируем дату
-            let formattedDate = bestGame.date.dateTimeString
-            
-            let bestGameMessage = "Рекорд: \(bestGame.correct)/\(bestGame.total) (\(formattedDate))"
-            
-            // Получаем среднюю точность
-            let totalAccuracy = statisticService.totalAccuracy
-            let accuracyMessage = "Средняя точность: \(String(format: "%.2f", totalAccuracy))%"
-            
-            // Формируем полное сообщение
-            let fullMessage = """
-            \(text)
-            \(totalGamesMessage)
-            \(bestGameMessage)
-            \(accuracyMessage)
-            """
-            
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: fullMessage,
-                buttonText: "Сыграть ещё раз"
-            )
-            show(quiz: viewModel)
-        } else {
-            presenter.switchToNextQuestion()
-            previewImage.layer.borderWidth = 0
-            questionFactory?.requestNextQuestion()
-            showLoadingIndicator()
         }
     }
 
