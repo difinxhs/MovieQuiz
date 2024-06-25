@@ -59,6 +59,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
+    //MARK: - functions
+    
     // приватный метод конвертации, который принимает моковый вопрос и возвращает вью модель для главного экрана
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
