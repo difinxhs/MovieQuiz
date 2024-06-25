@@ -64,18 +64,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     //MARK: - QuestionFactoryDelegate
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
-        //проверка что вопрос не нил
-        guard let question = question else {
-            return
-        }
-        
-            currentQuestion = question
-        let viewModel = presenter.convert(model: question)
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.show(quiz: viewModel)
-            self?.hideLoadingIndicator()
-        }
+        presenter.didRecieveNextQuestion(question: question)
     }
     
     func didLoadDataFromServer() {
@@ -91,19 +80,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     @IBAction
     private func yesButtonClicked(_ sender: UIButton) {
-        presenter.currentQuestion = currentQuestion
         presenter.yesButtonClicked()
     }
     
     @IBAction 
     private func noButtonClicked(_ sender: UIButton) {
-        presenter.currentQuestion = currentQuestion
         presenter.noButtonClicked()
     }
     
     //MARK: - private functions
     
-    private func show (quiz step: QuizStepViewModel) {
+    func show (quiz step: QuizStepViewModel) {
         previewImage.image = step.image
         questionLable.text = step.question
         indexLable.text = step.questionNumber
@@ -111,7 +98,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     //приватный метод. Получаем данные из структуры модели и привязываем презентер
-    private func show(quiz result: QuizResultsViewModel) {
+    func show(quiz result: QuizResultsViewModel) {
         let alertModel = AlertModel(
             title: result.title,
             message: result.text,
