@@ -57,6 +57,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         easyViewDid()
         
         activityIndicator.hidesWhenStopped = true
+        
+        presenter.viewController = self
 
     }
     //MARK: - QuestionFactoryDelegate
@@ -89,20 +91,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     @IBAction
     private func yesButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-            let givenAnswer = true
-            showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.yesButtonClicked()
     }
     
     @IBAction 
     private func noButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-           let givenAnswer = false
-           showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.noButtonClicked()
     }
     
     //MARK: - private functions
@@ -135,7 +131,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // приватный метод, который меняет цвет рамки
     // принимает на вход булевое значение и ничего не возвращает
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
         }
@@ -214,14 +210,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
 
-    private func easyViewDid () {
-        questionTitleLable.font =  UIFont(name: "YSDisplay-Medium", size: 20)
-        indexLable.font =  UIFont(name: "YSDisplay-Medium", size: 20)
-        questionLable.font =  UIFont(name: "YSDisplay-Bold", size: 23)
-        noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
-        yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
-    }
-    
     private func showLoadingIndicator() {
         //activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
         activityIndicator.startAnimating() // включаем анимацию
@@ -250,5 +238,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         )
         
         alertPresenter?.present(alert: alertModel)
+    }
+    
+    private func easyViewDid () {
+        questionTitleLable.font =  UIFont(name: "YSDisplay-Medium", size: 20)
+        indexLable.font =  UIFont(name: "YSDisplay-Medium", size: 20)
+        questionLable.font =  UIFont(name: "YSDisplay-Bold", size: 23)
+        noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
     }
 }
