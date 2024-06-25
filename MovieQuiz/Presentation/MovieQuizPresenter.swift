@@ -30,9 +30,11 @@ final class MovieQuizPresenter {
     }
 
     
-    func resetQuestionIndex() {
-        currentQuestionIndex = 0
-    }
+    func restartGame() {
+           currentQuestionIndex = 0
+           correctAnswers = 0
+           questionFactory?.requestNextQuestion()
+       }
     
     private func switchToNextQuestion() {
         currentQuestionIndex += 1
@@ -57,6 +59,12 @@ final class MovieQuizPresenter {
            viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
        }
     
+    func didAnswer(isCorrect: Bool) {
+        if isCorrect {
+            correctAnswers += 1
+        }
+    }
+    
     func didRecieveNextQuestion(question: QuizQuestion?) {
             guard let question = question else {
                 return
@@ -74,7 +82,7 @@ final class MovieQuizPresenter {
             
             statisticService?.store(correct: correctAnswers, total: questionsAmount)
             
-                   let text = correctAnswers == self.questionsAmount ?
+            var text = correctAnswers == self.questionsAmount ?
                    "Поздравляем, вы ответили на 10 из 10!" :
                    "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
 

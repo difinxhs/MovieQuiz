@@ -26,7 +26,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - Lifecycle
 
-    private var correctAnswers = 0
+    //private var correctAnswers = 0
     
     private var questionFactory: QuestionFactoryProtocol?
     
@@ -106,8 +106,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             completion: { [weak self] in
                 guard let self = self else { return }
                 
-                self.presenter.resetQuestionIndex()
-                self.correctAnswers = 0
+                self.presenter.restartGame()
+                //self.correctAnswers = 0
                 
                 self.questionFactory?.requestNextQuestion()
             }
@@ -119,9 +119,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // приватный метод, который меняет цвет рамки
     // принимает на вход булевое значение и ничего не возвращает
     func showAnswerResult(isCorrect: Bool) {
-        if isCorrect {
-            correctAnswers += 1
-        }
+        presenter.didAnswer(isCorrect: isCorrect)
         
         // Блокируем кнопки
         yesButton.isEnabled = false
@@ -134,7 +132,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                     guard let self = self else { return }
-                    self.presenter.correctAnswers = self.correctAnswers
+                    //self.presenter.correctAnswers = self.correctAnswers
                     self.presenter.questionFactory = self.questionFactory
                     self.presenter.showNextQuestionOrResults()
             
@@ -166,8 +164,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             completion: { [weak self] in
                 guard let self = self else { return }
                 
-                self.presenter.resetQuestionIndex()
-                self.correctAnswers = 0
+                self.presenter.restartGame()
+                //self.correctAnswers = 0
                 
                 self.questionFactory?.requestNextQuestion()
             }
