@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
     @IBOutlet
     private weak var questionTitleLable: UILabel!
@@ -91,6 +91,19 @@ final class MovieQuizViewController: UIViewController {
             previewImage.layer.masksToBounds = true
             previewImage.layer.borderWidth = 8
             previewImage.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+        }
+        
+        func blockButtons() {
+            yesButton.isEnabled = false
+            noButton.isEnabled = false
+        }
+    
+        func unBlockButtons() {
+            yesButton.isEnabled = true
+            noButton.isEnabled = true
+            
+            //Убираем рамку после ответа
+            previewImage.layer.borderWidth = 0
         }
 
        func showLoadingIndicator() {

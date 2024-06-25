@@ -5,7 +5,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private let questionsAmount: Int = 10
     private var currentQuestionIndex: Int = 0
     private var currentQuestion: QuizQuestion?
-     weak var viewController: MovieQuizViewController?
+     weak var viewController: MovieQuizViewControllerProtocol?
     private var correctAnswers: Int = 0
     
     private var statisticService: StatisticServiceProtocol?
@@ -13,7 +13,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     private var alertPresenter: AlertPresenter?
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.statisticService = StatisticService()
         self.viewController = viewController
         
@@ -109,8 +109,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         didAnswer(isCorrect: isCorrect)
         
         // Блокируем кнопки
-        viewController?.yesButton.isEnabled = false
-        viewController?.noButton.isEnabled = false
+        viewController?.blockButtons()
         
         viewController?.highlightImageBorder(isCorrect: isCorrect)
         
@@ -119,10 +118,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             self.showNextQuestionOrResults()
             
             // Разблокируем кнопки
-            viewController?.yesButton.isEnabled = true
-            viewController?.noButton.isEnabled = true
-            
-            viewController?.previewImage.layer.borderWidth = 0
+            viewController?.unBlockButtons()   
         }
     }
     
