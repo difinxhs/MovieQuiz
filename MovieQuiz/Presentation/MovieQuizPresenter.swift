@@ -96,12 +96,33 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         
         let givenAnswer = isYes
         
-        viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        self.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
     func didAnswer(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
+        }
+    }
+    
+    func showAnswerResult(isCorrect: Bool) {
+        didAnswer(isCorrect: isCorrect)
+        
+        // Блокируем кнопки
+        viewController?.yesButton.isEnabled = false
+        viewController?.noButton.isEnabled = false
+        
+        viewController?.highlightImageBorder(isCorrect: isCorrect)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.showNextQuestionOrResults()
+            
+            // Разблокируем кнопки
+            viewController?.yesButton.isEnabled = true
+            viewController?.noButton.isEnabled = true
+            
+            viewController?.previewImage.layer.borderWidth = 0
         }
     }
     

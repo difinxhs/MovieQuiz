@@ -9,16 +9,16 @@ final class MovieQuizViewController: UIViewController {
     private weak var indexLable: UILabel!
     
     @IBOutlet 
-    private weak var previewImage: UIImageView!
+    weak var previewImage: UIImageView!
     
     @IBOutlet 
     private weak var questionLable: UILabel!
     
     @IBOutlet 
-    private weak var noButton: UIButton!
+    weak var noButton: UIButton!
     
     @IBOutlet 
-    private weak var yesButton: UIButton!
+    weak var yesButton: UIButton!
     
     @IBOutlet
     private weak var activityIndicator: UIActivityIndicatorView!
@@ -87,28 +87,11 @@ final class MovieQuizViewController: UIViewController {
            self.present(alert, animated: true, completion: nil)
        }
        
-       func showAnswerResult(isCorrect: Bool) {
-           presenter.didAnswer(isCorrect: isCorrect)
-           
-           // Блокируем кнопки
-           yesButton.isEnabled = false
-           noButton.isEnabled = false
-           
-           previewImage.layer.masksToBounds = true
-           previewImage.layer.borderWidth = 8
-           previewImage.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-           
-           DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-               guard let self = self else { return }
-               self.presenter.showNextQuestionOrResults()
-               
-               // Разблокируем кнопки
-               self.yesButton.isEnabled = true
-               self.noButton.isEnabled = true
-               
-               self.previewImage.layer.borderWidth = 0
-           }
-       }
+        func highlightImageBorder(isCorrect: Bool) {
+            previewImage.layer.masksToBounds = true
+            previewImage.layer.borderWidth = 8
+            previewImage.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+        }
 
        func showLoadingIndicator() {
            activityIndicator.startAnimating() // включаем анимацию
