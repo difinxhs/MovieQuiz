@@ -62,13 +62,13 @@ final class MovieQuizViewController: UIViewController {
        
        // MARK: - private functions
        
-        private func show(quiz step: QuizStepViewModel) {
+       func show(quiz step: QuizStepViewModel) {
            previewImage.image = step.image
            questionLable.text = step.question
            indexLable.text = step.questionNumber
        }
        
-        private func show(quiz result: QuizResultsViewModel) {
+        func show(quiz result: QuizResultsViewModel) {
            let message = presenter.makeResultsMessage()
            
            let alert = UIAlertController(
