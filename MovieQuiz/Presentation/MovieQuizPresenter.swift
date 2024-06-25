@@ -2,11 +2,11 @@ import UIKit
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
     
-    let questionsAmount: Int = 10
+    private let questionsAmount: Int = 10
     private var currentQuestionIndex: Int = 0
-    var currentQuestion: QuizQuestion?
+    private var currentQuestion: QuizQuestion?
     weak var viewController: MovieQuizViewController?
-    var correctAnswers: Int = 0
+    private var correctAnswers: Int = 0
     
     private var statisticService: StatisticServiceProtocol?
     private var questionFactory: QuestionFactoryProtocol?
@@ -99,13 +99,13 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         self.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
-    func didAnswer(isCorrect: Bool) {
+    private func didAnswer(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
         }
     }
     
-    func showAnswerResult(isCorrect: Bool) {
+    private func showAnswerResult(isCorrect: Bool) {
         didAnswer(isCorrect: isCorrect)
         
         // Блокируем кнопки
@@ -126,7 +126,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
-    func showNextQuestionOrResults() {
+    private func showNextQuestionOrResults() {
         if self.isLastQuestion() {
             statisticService?.store(correct: correctAnswers, total: questionsAmount)
             
