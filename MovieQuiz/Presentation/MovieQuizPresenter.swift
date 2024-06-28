@@ -5,7 +5,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private let questionsAmount: Int = 10
     private var currentQuestionIndex: Int = 0
     private var currentQuestion: QuizQuestion?
-     weak var viewController: MovieQuizViewControllerProtocol?
+    weak var viewController: MovieQuizViewControllerProtocol?
     private var correctAnswers: Int = 0
     
     private var statisticService: StatisticServiceProtocol?
@@ -41,12 +41,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         viewController?.hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
-        
+    
     func didFailToLoadData(with error: Error) {
         let message = error.localizedDescription
         viewController?.showNetworkError(message: message)
     }
-        
+    
     func didRecieveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
@@ -120,7 +120,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             self.showNextQuestionOrResults()
             
             // Разблокируем кнопки
-            viewController?.unBlockButtons()   
+            viewController?.unBlockButtons()
         }
     }
     
@@ -148,7 +148,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService?.gamesCount ?? 0)"
         let currentGameResultLine = "Ваш результат: \(correctAnswers)\\\(questionsAmount)"
         let bestGameInfoLine = "Рекорд: \(bestGame?.correct ?? 0)\\\(bestGame?.total ?? 0)" +
-            " (\(bestGame?.date.dateTimeString ?? ""))"
+        " (\(bestGame?.date.dateTimeString ?? ""))"
         let averageAccuracyLine = "Средняя точность: \(String(format: "%.2f", statisticService?.totalAccuracy ?? 0))%"
         
         let resultMessage = [

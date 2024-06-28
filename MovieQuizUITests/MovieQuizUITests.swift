@@ -3,7 +3,7 @@ import XCTest
 final class MovieQuizUITests: XCTestCase {
     
     var app: XCUIApplication!
-
+    
     override func setUpWithError() throws {
         try super.setUpWithError()
         
@@ -12,14 +12,14 @@ final class MovieQuizUITests: XCTestCase {
         
         continueAfterFailure = false
     }
-
+    
     override func tearDownWithError() throws {
         try super.tearDownWithError()
         
         app.terminate()
         app = nil
     }
-   
+    
     func testYesButton() {
         
         sleep(3)
@@ -66,7 +66,7 @@ final class MovieQuizUITests: XCTestCase {
             app.buttons["Yes"].tap()
             sleep(2)
         }
-
+        
         let alert = app.alerts["Этот раунд окончен!"]
         
         XCTAssertTrue(alert.exists)
