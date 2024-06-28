@@ -41,7 +41,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         self.alertPresenter = AlertPresenter(viewController: self)
         
         // Разгружаем метод viewDidLoad
-        easyViewDid()
+        setupViews()
         
         activityIndicator.hidesWhenStopped = true
         
@@ -131,7 +131,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         alertPresenter?.present(alert: alertModel)
     }
     
-    private func easyViewDid() {
+    private func setupViews() {
         questionTitleLable.font = UIFont(name: "YSDisplay-Medium", size: 20)
         indexLable.font = UIFont(name: "YSDisplay-Medium", size: 20)
         questionLable.font = UIFont(name: "YSDisplay-Bold", size: 23)
