@@ -26,9 +26,9 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     
     // MARK: - Lifecycle
     
-    private var currentQuestion: QuizQuestion?
-    
-    private var alertPresenter: AlertPresenter?
+//    private var currentQuestion: QuizQuestion?
+//    
+//    private var alertPresenter: AlertPresenter?
     
     private var presenter: MovieQuizPresenter!
     
@@ -38,7 +38,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         previewImage.layer.cornerRadius = 20
         
         showLoadingIndicator()
-        self.alertPresenter = AlertPresenter(viewController: self)
+        //self.alertPresenter = AlertPresenter(viewController: self)
         
         // Разгружаем метод viewDidLoad
         setupViews()
@@ -128,7 +128,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             }
         )
         
-        alertPresenter?.present(alert: alertModel)
+        presenter?.alertPresenter?.present(alert: alertModel)
     }
     
     private func setupViews() {

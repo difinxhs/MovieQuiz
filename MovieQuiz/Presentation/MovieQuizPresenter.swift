@@ -11,7 +11,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private var statisticService: StatisticServiceProtocol?
     private var questionFactory: QuestionFactoryProtocol?
     
-    private var alertPresenter: AlertPresenter?
+    var alertPresenter: AlertPresenter?
+    
     
     init(viewController: MovieQuizViewControllerProtocol) {
         self.statisticService = StatisticService()
@@ -35,29 +36,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     
-    //MARK: - QuestionFactoryDelegate
-    
-    func didLoadDataFromServer() {
-        viewController?.hideLoadingIndicator()
-        questionFactory?.requestNextQuestion()
-    }
-    
-    func didFailToLoadData(with error: Error) {
-        let message = error.localizedDescription
-        viewController?.showNetworkError(message: message)
-    }
-    
-    func didRecieveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else {
-            return
-        }
-        
-        currentQuestion = question
-        let viewModel = convert(model: question)
-        DispatchQueue.main.async { [weak self] in
-            self?.viewController?.show(quiz: viewModel)
-        }
-    }
+   
     
     //MARK: - functions
     
@@ -141,7 +120,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     func makeResultsMessage() -> String {
-        statisticService?.store(correct: correctAnswers, total: questionsAmount)
+        storeData()
         
         let bestGame = statisticService?.bestGame
         
@@ -156,5 +135,35 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         ].joined(separator: "\n")
         
         return resultMessage
+    }
+    
+    func storeData() {
+        statisticService?.store(correct: correctAnswers, total: questionsAmount)
+    }
+}
+
+extension MovieQuizPresenter {
+    //MARK: - QuestionFactoryDelegate
+    
+    func didLoadDataFromServer() {
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        let message = error.localizedDescription
+        viewController?.showNetworkError(message: message)
+    }
+    
+    func didRecieveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.show(quiz: viewModel)
+        }
     }
 }
