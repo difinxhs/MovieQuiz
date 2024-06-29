@@ -26,10 +26,6 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     
     // MARK: - Lifecycle
     
-//    private var currentQuestion: QuizQuestion?
-//    
-//    private var alertPresenter: AlertPresenter?
-    
     private var presenter: MovieQuizPresenter!
     
     override func viewDidLoad() {
@@ -38,7 +34,6 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         previewImage.layer.cornerRadius = 20
         
         showLoadingIndicator()
-        //self.alertPresenter = AlertPresenter(viewController: self)
         
         // Разгружаем метод viewDidLoad
         setupViews()
