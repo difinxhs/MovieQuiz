@@ -11,8 +11,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
     }
     
     private var movies: [MostPopularMovie] = []
-
-
+    
     func loadData() {
         moviesLoader.loadMovies { [weak self] result in
             DispatchQueue.main.async {
